@@ -75,7 +75,7 @@ db.create_table(table_name, table_content):
 
 ##### Parameter
 
-> table: _string_, search*parameter: \_dict*
+> table: _string_, search_parameter: _dict_
 
 ```python
 # Example Table Name
