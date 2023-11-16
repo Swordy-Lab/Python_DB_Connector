@@ -1,8 +1,10 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
-VERSION = '0.0.2' 
+VERSION = '0.0.3' 
 DESCRIPTION = 'Simple database connector for python'
-LONG_DESCRIPTION = 'Python module for simple connection and editing of databases.'
+this_directory = Path(__file__).parent
+LONG_DESCRIPTION = (this_directory / "README.md").read_text()
 
 # Setting up
 setup(
@@ -13,6 +15,7 @@ setup(
         author_email="<mail@reneschwertfeger.de>",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type='text/markdown',
         packages=find_packages(),
         install_requires=["mysql-connector"], # add any additional packages that 
         # needs to be installed along with your package. Eg: 'caer'
