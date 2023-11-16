@@ -1,5 +1,6 @@
 import os
 from simple_db_connector import database
+from __init__ import database
 import decimal
 import datetime
 
@@ -31,7 +32,8 @@ table_name =  "cars_table"
 search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
-}  
+} 
+search_operator = ["AND"]
 
 # Example Table creation 
-db.get_db_entrys(table_name, search_parameter)
+db.get_db_entrys(table_name, search_parameter, search_operator)

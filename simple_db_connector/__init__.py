@@ -168,13 +168,13 @@ class database:
             logging.critical("Error creating entry: " + str(e))
             self.output = {"status": False, "error": e}
 
-    def get_db_entrys(self, table, search_parameter):
+    def get_db_entrys(self, table, search_parameter, search_operator=None):
         try:
             if self.check_table(table):
                 self.connect_db()
 
                 query = f"SELECT * FROM {table} WHERE " + self.create_sql_condition(
-                    search_parameter
+                    search_parameter, search_operator
                 )
                 self.mycursor.execute(query)
                 self.output = {"status": True}
@@ -215,12 +215,22 @@ class database:
         except Exception as e:
             self.output = {"status": False, "error": e}
 
-    def create_sql_condition(self, search_parameter):
+    def create_sql_condition(self, search_parameter, operators = None):
         keys = get_keys_out_of_dict(search_parameter)
         query = ""
+        count = 0
         for key in keys:
+            if operators == None:
+                operator = "and"
+            try:
+                operator = operators[count]
+            except:
+                operator = "and"
+
             if query == "":
                 query += f'{key}="{search_parameter[key]}"'
             else:
-                query += f', {key}="{search_parameter[key]}"'
+                query += f' {operator} {key}="{search_parameter[key]}"'
+            
+            count += 1
         return query
