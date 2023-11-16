@@ -34,7 +34,7 @@ After we have called the class, we can also use the functions of the class. All 
 
 ### _class_ database.check_table
 
-#### Parameter
+##### Parameter
 
 > table name: _string_
 
@@ -50,7 +50,7 @@ print(db.check_table(table_name))
 
 ### _class_ database.create_table
 
-#### Parameter
+##### Parameter
 
 > table name: _string_, table content: _dict_
 
@@ -73,7 +73,7 @@ db.create_table(table_name, table_content):
 
 ### _class_ database.check_db_entry
 
-#### Parameter
+##### Parameter
 
 > table: _string_, search*parameter: \_dict*
 
@@ -110,7 +110,7 @@ db.check_db_entry(table_name, search_parameter):
 
 ### _class_ database.create_db_entry
 
-#### Parameter
+##### Parameter
 
 > table: _string_, data: _dict_, prime*key: \_string*; \*default value = "id"
 
@@ -137,7 +137,7 @@ db.create_db_entry(table_name, table_content, prime_key):
 
 ### _class_ database.get_db_entrys
 
-#### Parameter
+##### Parameter
 
 > table: _string_, search*parameter: \_dict*
 
@@ -172,7 +172,7 @@ db.get_db_entrys(table_name, search_parameter):
 
 ### _class_ database.update_entry
 
-#### Parameter
+##### Parameter
 
 > table: _string_, search*parameter: \_dict*, update*parameter \_dict*
 
