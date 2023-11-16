@@ -118,8 +118,6 @@ table_content = {
 	"manufacture" : "toyota",
 	"model" : "Aygo X play",
 	"ps" : 72, 
-
-
 } 
 
 # Example Table prime key
