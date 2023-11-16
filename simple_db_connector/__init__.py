@@ -154,11 +154,13 @@ class database:
 
                     if count == len(values) and counter == 0:
                         query = query[:-2]
-
-                if "," in query_temp:
-                    query += ")"
+                if 'query_temp' in locals():
+                    if "," in query_temp:
+                        query += ")"
+                    else:
+                        query += '")'
                 else:
-                    query += '")'
+                    query += ")"
                 self.mycursor.execute(query)
                 self.mydb.commit()
                 self.output = {"status": True}

@@ -1,5 +1,6 @@
 import os
 from simple_db_connector import database
+from __init__ import database
 import decimal
 import datetime
 
@@ -24,7 +25,7 @@ table_content = {
 } 
 
 # Example Table prime key
-search_column = "id"
+search_column = "manufacture"
 # To illustrate this, I have entered "id". However, if "search_column" is empty, "id" is selected.
 
 # Example 
