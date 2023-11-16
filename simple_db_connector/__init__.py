@@ -98,13 +98,13 @@ class database:
         except Exception as e:
             self.output = {"status": False, "error": e}
 
-    def check_db_entry(self, table, search_parameter):
+    def check_db_entry(self, table, search_parameter, operators = None):
         try:
             if self.check_table(table):
                 self.connect_db()
 
                 query = f"SELECT * FROM {table} WHERE " + self.create_sql_condition(
-                    search_parameter
+                    search_parameter, operators
                 )
 
                 self.mycursor.execute(query)
@@ -184,7 +184,7 @@ class database:
         except Exception as e:
             self.output = {"status": False, "error": e}
 
-    def update_entry(self, table, search_parameter, update_parameter):
+    def update_entry(self, table, search_parameter, update_parameter, operators = None):
         try:
             if self.check_table(table):
                 if self.check_db_entry(table, search_parameter):
@@ -200,9 +200,9 @@ class database:
 
                     query = (
                         f"UPDATE {table} SET "
-                        + self.create_sql_condition(update_parameter)
+                        + self.create_sql_condition(update_parameter, operators)
                         + " WHERE "
-                        + self.create_sql_condition(search_parameter)
+                        + self.create_sql_condition(search_parameter, operators)
                     )
 
                     self.mycursor.execute(query)

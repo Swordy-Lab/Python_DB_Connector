@@ -1,6 +1,5 @@
 import os
 from simple_db_connector import database
-from __init__ import database
 import decimal
 import datetime
 
@@ -36,4 +35,4 @@ search_parameter =  {
 search_operator = ["AND"]
 
 # Example Table creation 
-db.get_db_entrys(table_name, search_parameter, search_operator)
+print(db.get_db_entrys(table_name, search_parameter, search_operator))
