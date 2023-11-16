@@ -187,7 +187,7 @@ table_name =  "cars_table"
 
 # Example Search Parameter
 search_parameter =  {
-	"manufacture"  :  "toyoat"
+	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 }  
 # Example Update Parameter
