@@ -24,8 +24,8 @@ table_content = {
 } 
 
 # Example Table prime key
-prime_key = "id"
-# To illustrate this, I have entered "id". However, if "prime_key" is empty, "id" is selected.
+search_column = "id"
+# To illustrate this, I have entered "id". However, if "search_column" is empty, "id" is selected.
 
 # Example 
-db.create_db_entry(table_name, table_content, prime_key)
+db.create_db_entry(table_name, table_content, search_column=search_column)

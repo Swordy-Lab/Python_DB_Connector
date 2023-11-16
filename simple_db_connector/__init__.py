@@ -118,9 +118,9 @@ class database:
         except Exception as e:
             self.output = {"status": False, "error": e}
 
-    def create_db_entry(self, table, data, prime_key="id"):
+    def create_db_entry(self, table, data, search_column="id"):
         try:
-            if not self.check_db_entry(table, {prime_key: data[prime_key]}):
+            if not self.check_db_entry(table, {search_column: data[search_column]}):
                 self.connect_db()
                 keys = get_keys_out_of_dict(data)
                 values = get_values_out_of_dict(data)
