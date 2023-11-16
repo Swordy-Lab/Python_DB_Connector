@@ -59,7 +59,7 @@ table_name = "cars_table"
 
 # Example Table Content
 table_content = {
-	"manufacture" : "toyoat"
+	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 	"ps" : 72, 
 } 
@@ -95,7 +95,7 @@ table_name =  "cars_table"
 
 # Example Search Parameter
 search_parameter =  {
-	"manufacture" : "toyoat"
+	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 }  
 
@@ -115,7 +115,7 @@ table_name =  "cars_table"
 
 # Example Table Content
 table_content = {
-	"manufacture" : "toyoat"
+	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 	"ps" : 72, 
 } 
@@ -151,7 +151,7 @@ table_name =  "cars_table"
 
 # Example Search Parameter
 search_parameter =  {
-	"manufacture" : "toyoat"
+	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 }  
 
