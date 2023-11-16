@@ -5,3 +5,4 @@ build
 dist
 simple_db_connector.egg-info
 .env
+.DS_Store
