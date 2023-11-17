@@ -31,7 +31,9 @@ table_name =  "cars_table"
 search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
-}  
+}
+# Example Search Operator
+search_operator = ["AND"]  
 
 # Example Table creation 
-db.check_db_entry(table_name, search_parameter)
+db.check_db_entry(table_name, search_parameter, search_operator)

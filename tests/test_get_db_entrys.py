@@ -32,6 +32,7 @@ search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
 } 
+# Example Search Operator
 search_operator = ["AND"]
 
 # Example Table creation 

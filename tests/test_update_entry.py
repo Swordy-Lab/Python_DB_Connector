@@ -24,9 +24,11 @@ search_parameter =  {
 search_parameter =  {
 	"manufacture"  :  "toyota"
 } 
+# Example Search Operator
+search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter)
+db.update_entry(table_name, search_parameter, search_operator)
 
 # Example Table Name 
 table_name =  "cars_table"  
@@ -41,6 +43,8 @@ search_parameter =  {
 	"manufacture"  :  "toyota",
 	"model" : "Aygo X play",
 } 
+# Example Search Operator
+search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter)
+db.update_entry(table_name, search_parameter, search_operator)

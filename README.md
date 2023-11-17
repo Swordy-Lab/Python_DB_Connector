@@ -97,10 +97,12 @@ table_name =  "cars_table"
 search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
-}  
+}
+# Example Search Operator
+search_operator = ["AND"]
 
 # Example Table creation 
-db.check_db_entry(table_name, search_parameter)
+db.check_db_entry(table_name, search_parameter, search_operator)
 ```
 >It's also possible to have multiple search parameter
 
@@ -153,10 +155,12 @@ table_name =  "cars_table"
 search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
-}  
+}
+# Example Search Operator
+search_operator = ["AND"]
 
 # Example Table creation 
-db.get_db_entrys(table_name, search_parameter)
+db.get_db_entrys(table_name, search_parameter, search_operator)
 ```
 > As with check_db_entry, it is also possible to use several search parameters here
 
@@ -189,14 +193,16 @@ table_name =  "cars_table"
 search_parameter =  {
 	"manufacture" : "toyoat",
 	"model" : "Aygo X yalp",
-}  
+}
 # Example Update Parameter
 search_parameter =  {
 	"manufacture"  :  "toyota"
 	"model" : "Aygo X play",
 } 
+# Example Search Operator
+search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter)
+db.update_entry(table_name, search_parameter, search_operator)
 ```
 > It's also possible to use multiple search and update parameter here
