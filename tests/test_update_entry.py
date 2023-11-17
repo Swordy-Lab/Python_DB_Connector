@@ -1,5 +1,6 @@
 import os
 from simple_db_connector import database
+from __init__ import database
 import decimal
 import datetime
 
@@ -21,14 +22,14 @@ search_parameter =  {
 	"manufacture"  :  "toyoat"
 }  
 # Example Update Parameter
-search_parameter =  {
+update_parameter =  {
 	"manufacture"  :  "toyota"
 } 
 # Example Search Operator
 search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter, search_operator)
+#db.update_entry(table_name, search_parameter, update_parameter, search_operator)
 
 # Example Table Name 
 table_name =  "cars_table"  
@@ -39,7 +40,7 @@ search_parameter =  {
 	"model" : "Aygo X yalp",
 }  
 # Example Update Parameter
-search_parameter =  {
+update_parameter =  {
 	"manufacture"  :  "toyota",
 	"model" : "Aygo X play",
 } 
@@ -47,4 +48,4 @@ search_parameter =  {
 search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter, search_operator)
+db.update_entry(table_name, search_parameter, update_parameter, search_operator)

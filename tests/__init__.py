@@ -200,7 +200,7 @@ class database:
 
                     query = (
                         f"UPDATE {table} SET "
-                        + self.create_sql_condition(update_parameter, operators)
+                        + set_query
                         + " WHERE "
                         + self.create_sql_condition(search_parameter, operators)
                     )
