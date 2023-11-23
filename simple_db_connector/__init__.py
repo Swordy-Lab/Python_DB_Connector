@@ -27,9 +27,8 @@ class database:
             self.db_port = db_port
             self.db_name = db_name
 
-            self.output = {"status": True}
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception("An error occurred while initiating the class object. Error: " + e)
 
     def data_typ_converter(self, python_type):
         switcher = {
@@ -72,12 +71,11 @@ class database:
             self.connect_db()
             query = f"SHOW TABLES LIKE '{table}'"
             self.mycursor.execute(query)
-            self.output = {"status": True}
             for row in self.mycursor:
                 return True
             return False
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception("An error occurred while checking the table. Error: " + e)
 
     def create_table(self, table, dict):
         try:
@@ -92,11 +90,10 @@ class database:
 
                 query += ")"
                 self.mycursor.execute(query)
-                self.output = {"status": True}
             else:
-                self.output = {"status": False, "error": "Table already exists."}
+                raise Exception(f"Table with the name {table} already exists.")
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception("An error occurred while creating the table. Error: " + e)
 
     def check_db_entry(self, table, search_parameter, operators = None):
         try:
@@ -108,65 +105,67 @@ class database:
                 )
 
                 self.mycursor.execute(query)
-                self.output = {"status": True}
                 if len(self.mycursor.fetchall()) == 0:
                     return False
                 else:
                     return True
             else:
-                self.output = {"status": False, "error": "Table doesnt exist"}
+                raise Exception(f"An error occurred while checking the table entry. Error: The table {table} does not exist.")
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception(f"An error occurred while checking the table entry. Error: " + e)
 
     def create_db_entry(self, table, data, search_column="id"):
         try:
-            if not self.check_db_entry(table, {search_column: data[search_column]}):
-                self.connect_db()
-                keys = get_keys_out_of_dict(data)
-                values = get_values_out_of_dict(data)
-                query = f"INSERT INTO {table} (id, "
-                query += ", ".join(keys)
-                current_id = self.generate_guid()  # self.check_id_exists(table)
-                query += f') VALUES ("{current_id}", '
-                count = 0
-                for value in values:
-                    counter = 0
-                    count += 1
-                    if type(value) == str:
-                        query += f'"{value}", '
-                    elif type(value) == list:
-                        query_temp = ""
-                        for item in value:
-                            counter += 1
-                            if not len(value) == 1:
-                                if query_temp == "":
-                                    query_temp += f'"{item}, '
-                                elif counter == len(value):
-                                    query_temp += f'{item}"'
+            if self.check_table(table):
+                if not self.check_db_entry(table, {search_column: data[search_column]}):
+                    self.connect_db()
+                    keys = get_keys_out_of_dict(data)
+                    values = get_values_out_of_dict(data)
+                    query = f"INSERT INTO {table} (id, "
+                    query += ", ".join(keys)
+                    current_id = self.generate_guid()  # self.check_id_exists(table)
+                    query += f') VALUES ("{current_id}", '
+                    count = 0
+                    for value in values:
+                        counter = 0
+                        count += 1
+                        if type(value) == str:
+                            query += f'"{value}", '
+                        elif type(value) == list:
+                            query_temp = ""
+                            for item in value:
+                                counter += 1
+                                if not len(value) == 1:
+                                    if query_temp == "":
+                                        query_temp += f'"{item}, '
+                                    elif counter == len(value):
+                                        query_temp += f'{item}"'
+                                    else:
+                                        query_temp += f"{item}, "
                                 else:
-                                    query_temp += f"{item}, "
-                            else:
-                                query_temp += f'"{item}'
-                        query += query_temp
+                                    query_temp += f'"{item}'
+                            query += query_temp
 
+                        else:
+                            query += f"{value}, "
+
+                        if count == len(values) and counter == 0:
+                            query = query[:-2]
+                    if 'query_temp' in locals():
+                        if "," in query_temp:
+                            query += ")"
+                        else:
+                            query += '")'
                     else:
-                        query += f"{value}, "
-
-                    if count == len(values) and counter == 0:
-                        query = query[:-2]
-                if 'query_temp' in locals():
-                    if "," in query_temp:
                         query += ")"
-                    else:
-                        query += '")'
+                    self.mycursor.execute(query)
+                    self.mydb.commit()
                 else:
-                    query += ")"
-                self.mycursor.execute(query)
-                self.mydb.commit()
-                self.output = {"status": True}
+                    raise Exception(f"An error occurred while creating the table entry. Error: The entry with the same search parameter doss already exist.")
+            else:
+                raise Exception(f"An error occurred while creating the table entry. Error: The table {table} does not exist.")
         except Exception as e:
-            logging.critical("Error creating entry: " + str(e))
-            self.output = {"status": False, "error": e}
+            raise Exception(f"An error occurred while creating the table entry. Error: " + e)
 
     def get_db_entrys(self, table, search_parameter, search_operator=None):
         try:
@@ -180,9 +179,9 @@ class database:
                 self.output = {"status": True}
                 return self.mycursor.fetchall()
             else:
-                self.output = {"status": False, "error": "Table doesnt exist"}
+                raise Exception(f"An error occurred while getting the table entrys. Error: The table {table} does not exist.")
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception(f"An error occurred while getting the table entrys. Error: " + e)
 
     def update_entry(self, table, search_parameter, update_parameter, operators = None):
         try:
@@ -209,28 +208,31 @@ class database:
                     self.mydb.commit()
                     self.output = {"status": True}
                 else:
-                    self.output = {"status": False, "error": "Entry doesnt exist"}
+                    raise Exception(f"An error occurred while updating the table entrys. Error: The table entry does not exist.")
             else:
-                self.output = {"status": False, "error": "Table doesnt exist"}
+                raise Exception(f"An error occurred while updating the table entrys. Error: The table {table} does not exist.")
         except Exception as e:
-            self.output = {"status": False, "error": e}
+            raise Exception(f"An error occurred while updating the table entrys. Error: " + e)
 
     def create_sql_condition(self, search_parameter, operators = None):
-        keys = get_keys_out_of_dict(search_parameter)
-        query = ""
-        count = 0
-        for key in keys:
-            if operators == None:
-                operator = "and"
-            try:
-                operator = operators[count]
-            except:
-                operator = "and"
+        try:
+            keys = get_keys_out_of_dict(search_parameter)
+            query = ""
+            count = 0
+            for key in keys:
+                if operators ==     None:
+                    operator = "and"
+                try:
+                    operator = operators[count]
+                except:
+                    operator = "and"
 
-            if query == "":
-                query += f'{key}="{search_parameter[key]}"'
-            else:
-                query += f' {operator} {key}="{search_parameter[key]}"'
-            
-            count += 1
-        return query
+                if query == "":
+                    query += f'{key}="{search_parameter[key]}"'
+                else:
+                    query += f' {operator} {key}="{search_parameter[key]}"'
+                
+                count += 1
+            return query
+        except:
+            raise Exception(f"An error occurred while creating the sql condition. Error: " + e)
