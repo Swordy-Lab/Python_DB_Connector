@@ -114,16 +114,21 @@ class database:
         except Exception as e:
             raise Exception(f"An error occurred while checking the table entry. Error: " + e)
 
-    def create_db_entry(self, table, data, search_column="id"):
+    def create_db_entry(self, table, data, search_column_prime_key="id"):
         try:
+            if hasattr(data, search_column_prime_key):
+                current_id = data[search_column_prime_key]
+            else:
+                current_id = self.generate_guid()  # self.check_id_exists(table)
+                data[search_column_prime_key] = current_id
+
             if self.check_table(table):
-                if not self.check_db_entry(table, {search_column: data[search_column]}):
+                if not self.check_db_entry(table, {search_column_prime_key: data[search_column_prime_key]}):
                     self.connect_db()
                     keys = get_keys_out_of_dict(data)
                     values = get_values_out_of_dict(data)
                     query = f"INSERT INTO {table} (id, "
                     query += ", ".join(keys)
-                    current_id = self.generate_guid()  # self.check_id_exists(table)
                     query += f') VALUES ("{current_id}", '
                     count = 0
                     for value in values:
