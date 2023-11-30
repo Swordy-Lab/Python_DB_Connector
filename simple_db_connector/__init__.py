@@ -4,11 +4,13 @@ import json
 import logging
 import uuid
 
+
 def get_keys_out_of_dict(dict):
     keys = []
     for key in dict.keys():
         keys.append(key)
     return keys
+
 
 def get_values_out_of_dict(dict):
     values = []
@@ -28,7 +30,9 @@ class database:
             self.db_name = db_name
 
         except Exception as e:
-            raise Exception("An error occurred while initiating the class object. Error: " + e)
+            raise Exception(
+                "An error occurred while initiating the class object. Error: " + e
+            )
 
     def data_typ_converter(self, python_type):
         switcher = {
@@ -95,7 +99,7 @@ class database:
         except Exception as e:
             raise Exception("An error occurred while creating the table. Error: " + e)
 
-    def check_db_entry(self, table, search_parameter, operators = None):
+    def check_db_entry(self, table, search_parameter, operators=None):
         try:
             if self.check_table(table):
                 self.connect_db()
@@ -110,9 +114,13 @@ class database:
                 else:
                     return True
             else:
-                raise Exception(f"An error occurred while checking the table entry. Error: The table {table} does not exist.")
+                raise Exception(
+                    f"An error occurred while checking the table entry. Error: The table {table} does not exist."
+                )
         except Exception as e:
-            raise Exception(f"An error occurred while checking the table entry. Error: " + e)
+            raise Exception(
+                f"An error occurred while checking the table entry. Error: " + e
+            )
 
     def create_db_entry(self, table, data, search_column_prime_key="id"):
         try:
@@ -123,40 +131,42 @@ class database:
                 data[search_column_prime_key] = current_id
 
             if self.check_table(table):
-                if not self.check_db_entry(table, {search_column_prime_key: data[search_column_prime_key]}):
+                if not self.check_db_entry(
+                    table, {search_column_prime_key: data[search_column_prime_key]}
+                ):
                     self.connect_db()
                     keys = get_keys_out_of_dict(data)
                     values = get_values_out_of_dict(data)
-                    query = f"INSERT INTO {table} (id, "
-                    query += ", ".join(keys)
-                    query += f') VALUES ("{current_id}", '
+                    query = f"INSERT INTO {table} ("
+                    query += ",".join(keys)
+                    query += f") VALUES ("
                     count = 0
                     for value in values:
                         counter = 0
                         count += 1
                         if type(value) == str:
-                            query += f'"{value}", '
+                            query += f'"{value}",'
                         elif type(value) == list:
                             query_temp = ""
                             for item in value:
                                 counter += 1
                                 if not len(value) == 1:
                                     if query_temp == "":
-                                        query_temp += f'"{item}, '
+                                        query_temp += f'"{item},'
                                     elif counter == len(value):
                                         query_temp += f'{item}"'
                                     else:
-                                        query_temp += f"{item}, "
+                                        query_temp += f"{item},"
                                 else:
                                     query_temp += f'"{item}'
-                            query += query_temp
+                            query += query_temp + ","
 
                         else:
-                            query += f"{value}, "
+                            query += f"{value},"
 
-                        if count == len(values) and counter == 0:
-                            query = query[:-2]
-                    if 'query_temp' in locals():
+                    query = query[:-1]
+
+                    if "query_temp" in locals():
                         if "," in query_temp:
                             query += ")"
                         else:
@@ -166,11 +176,17 @@ class database:
                     self.mycursor.execute(query)
                     self.mydb.commit()
                 else:
-                    raise Exception(f"An error occurred while creating the table entry. Error: The entry with the same search parameter doss already exist.")
+                    raise Exception(
+                        f"An error occurred while creating the table entry. Error: The entry with the same search parameter doss already exist."
+                    )
             else:
-                raise Exception(f"An error occurred while creating the table entry. Error: The table {table} does not exist.")
+                raise Exception(
+                    f"An error occurred while creating the table entry. Error: The table {table} does not exist."
+                )
         except Exception as e:
-            raise Exception(f"An error occurred while creating the table entry. Error: " + e)
+            raise Exception(
+                f"An error occurred while creating the table entry. Error: " + e
+            )
 
     def get_db_entrys(self, table, search_parameter, search_operator=None):
         try:
@@ -184,11 +200,15 @@ class database:
                 self.output = {"status": True}
                 return self.mycursor.fetchall()
             else:
-                raise Exception(f"An error occurred while getting the table entrys. Error: The table {table} does not exist.")
+                raise Exception(
+                    f"An error occurred while getting the table entrys. Error: The table {table} does not exist."
+                )
         except Exception as e:
-            raise Exception(f"An error occurred while getting the table entrys. Error: " + e)
+            raise Exception(
+                f"An error occurred while getting the table entrys. Error: " + e
+            )
 
-    def update_entry(self, table, search_parameter, update_parameter, operators = None):
+    def update_entry(self, table, search_parameter, update_parameter, operators=None):
         try:
             if self.check_table(table):
                 if self.check_db_entry(table, search_parameter):
@@ -213,19 +233,25 @@ class database:
                     self.mydb.commit()
                     self.output = {"status": True}
                 else:
-                    raise Exception(f"An error occurred while updating the table entrys. Error: The table entry does not exist.")
+                    raise Exception(
+                        f"An error occurred while updating the table entrys. Error: The table entry does not exist."
+                    )
             else:
-                raise Exception(f"An error occurred while updating the table entrys. Error: The table {table} does not exist.")
+                raise Exception(
+                    f"An error occurred while updating the table entrys. Error: The table {table} does not exist."
+                )
         except Exception as e:
-            raise Exception(f"An error occurred while updating the table entrys. Error: " + e)
+            raise Exception(
+                f"An error occurred while updating the table entrys. Error: " + e
+            )
 
-    def create_sql_condition(self, search_parameter, operators = None):
+    def create_sql_condition(self, search_parameter, operators=None):
         try:
             keys = get_keys_out_of_dict(search_parameter)
             query = ""
             count = 0
             for key in keys:
-                if operators ==     None:
+                if operators == None:
                     operator = "and"
                 try:
                     operator = operators[count]
@@ -236,8 +262,10 @@ class database:
                     query += f'{key}="{search_parameter[key]}"'
                 else:
                     query += f' {operator} {key}="{search_parameter[key]}"'
-                
+
                 count += 1
             return query
         except:
-            raise Exception(f"An error occurred while creating the sql condition. Error: " + e)
+            raise Exception(
+                f"An error occurred while creating the sql condition. Error: " + e
+            )
