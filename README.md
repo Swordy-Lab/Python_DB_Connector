@@ -178,12 +178,12 @@ search_parameter =  {
 	"manufacture"  :  "toyoat"
 }  
 # Example Update Parameter
-search_parameter =  {
+update_parameter =  {
 	"manufacture"  :  "toyota"
 } 
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter)
+db.update_entry(table_name, search_parameter, update_parameter)
 ```
 ```python
 # Example Table Name 
@@ -195,7 +195,7 @@ search_parameter =  {
 	"model" : "Aygo X yalp",
 }
 # Example Update Parameter
-search_parameter =  {
+update_parameter =  {
 	"manufacture"  :  "toyota"
 	"model" : "Aygo X play",
 } 
@@ -203,6 +203,6 @@ search_parameter =  {
 search_operator = ["AND"]
 
 # Example Table creation 
-db.update_entry(table_name, search_parameter, search_operator)
+db.update_entry(table_name, search_parameter, update_parameter, search_operator)
 ```
 > It's also possible to use multiple search and update parameter here
