@@ -136,43 +136,11 @@ class database:
                 ):
                     self.connect_db()
                     keys = get_keys_out_of_dict(data)
-                    values = get_values_out_of_dict(data)
                     query = f"INSERT INTO {table} ("
                     query += ",".join(keys)
-                    query += f") VALUES ("
-                    count = 0
-                    for value in values:
-                        counter = 0
-                        count += 1
-                        if type(value) == str:
-                            query += f'"{value}",'
-                        elif type(value) == list:
-                            query_temp = ""
-                            for item in value:
-                                counter += 1
-                                if not len(value) == 1:
-                                    if query_temp == "":
-                                        query_temp += f'"{item},'
-                                    elif counter == len(value):
-                                        query_temp += f'{item}"'
-                                    else:
-                                        query_temp += f"{item},"
-                                else:
-                                    query_temp += f'"{item}'
-                            query += query_temp + ","
+                    query += f") VALUES "
+                    query += self.create_sql_parameter(data)
 
-                        else:
-                            query += f"{value},"
-
-                    query = query[:-1]
-
-                    if "query_temp" in locals():
-                        if "," in query_temp:
-                            query += ")"
-                        else:
-                            query += '")'
-                    else:
-                        query += ")"
                     self.mycursor.execute(query)
                     self.mydb.commit()
                 else:
@@ -197,7 +165,6 @@ class database:
                     search_parameter, search_operator
                 )
                 self.mycursor.execute(query)
-                self.output = {"status": True}
                 return self.mycursor.fetchall()
             else:
                 raise Exception(
@@ -212,13 +179,7 @@ class database:
         try:
             if self.check_table(table):
                 if self.check_db_entry(table, search_parameter):
-                    keys = get_keys_out_of_dict(update_parameter)
-                    set_query = ""
-                    for key in keys:
-                        if set_query == "":
-                            set_query += f'{key}="{update_parameter[key]}"'
-                        else:
-                            set_query += f', {key}="{update_parameter[key]}"'
+                    set_query = self.create_sql_parameter(update_parameter, False, True)
 
                     self.connect_db()
 
@@ -231,7 +192,6 @@ class database:
 
                     self.mycursor.execute(query)
                     self.mydb.commit()
-                    self.output = {"status": True}
                 else:
                     raise Exception(
                         f"An error occurred while updating the table entrys. Error: The table entry does not exist."
@@ -258,14 +218,87 @@ class database:
                 except:
                     operator = "and"
 
-                if query == "":
-                    query += f'{key}="{search_parameter[key]}"'
-                else:
-                    query += f' {operator} {key}="{search_parameter[key]}"'
+                if query != "":
+                    query += f" {operator} "
 
-                count += 1
+                value = search_parameter[key]
+
+                if type(value) == str:
+                    query += f'{key}="{search_parameter[key]}"'
+                elif type(value) == list:
+                    query_temp = f"{key}="
+                    counter = 0
+                    for item in value:
+                        counter += 1
+                        if not len(value) == 1:
+                            if query_temp == f"{key}=":
+                                query_temp += f'"{item},'
+                            elif counter == len(value):
+                                query_temp += f'{item}"'
+                            else:
+                                query_temp += f"{item},"
+                        else:
+                            query_temp += f'"{item}"'
+                    query += query_temp
+
+                else:
+                    query += f"{key}={value}"
+
+            if query.endswith("and "):
+                query = query[:-5]
+            elif query.endswith("or "):
+                query = query[:-4]
+
             return query
-        except:
+        except Exception as e:
             raise Exception(
                 f"An error occurred while creating the sql condition. Error: " + e
+            )
+
+    def create_sql_parameter(self, parameter, add_parentheses=True, add_keys=False):
+        try:
+            parameter_values = get_values_out_of_dict(parameter)
+            keys = get_keys_out_of_dict(parameter)
+            count = 0
+            query = ""
+            for value in parameter_values:
+                if add_keys:
+                    query += f"{keys[count]}="
+                counter = 0
+                count += 1
+                if type(value) == str:
+                    query += f'"{value}",'
+                elif type(value) == list:
+                    query_temp = ""
+                    for item in value:
+                        counter += 1
+                        if not len(value) == 1:
+                            if query_temp == "":
+                                query_temp += f'"{item},'
+                            elif counter == len(value):
+                                query_temp += f'{item}"'
+                            else:
+                                query_temp += f"{item},"
+                        else:
+                            query_temp += f'"{item}'
+                    query += query_temp + ","
+
+                else:
+                    query += f"{value},"
+
+            query = query[:-1]
+            if add_parentheses:
+                query = "(" + query
+                if "query_temp" in locals():
+                    if "," in query_temp:
+                        query += ")"
+                    else:
+                        query += '")'
+                else:
+                    query += ")"
+
+            return query
+        except Exception as e:
+            raise Exception(
+                f"An error occurred while creating the sql parameter. Error: " + e
             )
